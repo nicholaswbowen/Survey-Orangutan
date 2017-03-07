@@ -5,10 +5,10 @@ import * as debug from 'debug';
 import * as ejs from 'ejs';
 import * as express from 'express';
 let expressValidator = require('express-validator');
-import * as session from 'express-session';
+
 import * as helmet from 'helmet';
 import * as mongoose from 'mongoose';
-let MongoStore = require('connect-mongo')(session);
+
 import * as morgan from 'morgan';
 import * as passport from 'passport';
 import * as path from 'path';
@@ -17,18 +17,10 @@ import {User} from './models/User';
 import {cookieList} from './lib/dev';
 
 // routes
-import * as ping from './api/ping';
+
 import * as auth from './api/auth';
-import * as protect from './api/protected';
 import * as user from './api/user';
-import * as car from './api/car.api';
-
-// models
-import {Car} from './models/Car';
-
-// seeds
-import {carSeed} from './models/car.seed';
-
+import * as postApi from './api/post.api';
 // replacing deprecated promise
 (<any> mongoose).Promise = global.Promise;
 
@@ -54,11 +46,6 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('mongoose connected');
     configPassport();
-    if (isDev) {
-      Car.count('*')
-        .then((count) => count === 0 ? Car.create(carSeed) : null)
-        .catch((e) => console.log(e));
-
       User.findOne({username: 'admin'}, (err, user) => {
         if (err) return;
         if (user) return;
@@ -70,7 +57,7 @@ mongoose.connect(process.env.MONGO_URI)
           admin.roles = ['user', 'admin'];
           admin.save();
       });
-    }
+
   }).catch((e) => {
     console.log(e);
   });
@@ -81,50 +68,20 @@ app.set('trust proxy', 1);
 // parse cookies ability
 app.use(cookieParser());
 
-// config req.session
-let sess = {
-  maxAge: 24 * 60 * 60 * 1000 * 2, //  2 days
-  secure: false,
-  httpOnly: true
-};
-
-// set to secure in production
-if (!isDev) {
-  sess.secure = true;
-}
-
-// use session config
-app.use(
-  session({
-    cookie: sess,
-    secret: process.env.SESSION_SECRET, // can support an array
-    store: new MongoStore({
-      mongooseConnection: mongoose.connection
-    }),
-    unset: 'destroy',
-    resave: false,
-    saveUninitialized: false // if nothing has changed.. do not restore cookie
-  })
-);
-
 // config bodyParser
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(expressValidator());
 
 app.use(passport.initialize());
-app.use(passport.session());
 
 // a server route
 app.use('/', routes);
 
 // apis
-app.use('/api', ping);
-app.use('/api', protect);
 app.use('/api', user);
 app.use('/api', auth);
-app.use('/api', car);
-
+app.use('/api', postApi);
 // THIS IS THE INTERCEPTION OF ALL OTHER REQ
 // After server routes / static / api
 // redirect 404 to home for the sake of AngularJS client-side routes

@@ -31,7 +31,7 @@ let initialize = function intialize () {
         return done(err, false);
       }
       if (user) {
-        done(null, user);
+        done(null, jwt_payload);
       } else {
         done(null, false);
       }
@@ -43,7 +43,7 @@ let initialize = function intialize () {
       consumerSecret: process.env.TWITTER_SECRET,
       callbackURL: process.env.ROOT_URL + '/auth/twitter/callback',
       profileFields: ['id', 'displayName', 'photos'],
-      session: true
+      session: false
     },
     function(token, tokenSecret, profile, cb) {
       User.findOne({ twitterId: profile.id }, function (err, user) {
@@ -64,8 +64,8 @@ let initialize = function intialize () {
     }
   ));
 
-  passport.use(new LocalStrategy({session: true}, function(username: string, password: string, done) {
-    User.findOne({ username }).select('+passwordHash +salt')
+  passport.use(new LocalStrategy({session: false}, function(username: string, password: string, done) {
+    User.findOne({ username }, { _id: 0, __v: 0 }).select('+passwordHash +salt')
       .exec(function(err, user) {
         if (err) return done(err);
         if (!user) return done(null, false, { message: 'Incorrect username.' });
