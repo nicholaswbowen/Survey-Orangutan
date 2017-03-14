@@ -1,11 +1,13 @@
 export const permission = {
   user: [
-  'post:read',
-  'post:write'
+  'survey:read',
+  'survey:write',
+  'survey:modify'
   ],
   admin: [
-  'post:read',
-  'post:write',
-  'post:delete'
+  'survey:read',
+  'survey:delete',
+  'survey:write',
+  'survey:modify'
   ]
 };

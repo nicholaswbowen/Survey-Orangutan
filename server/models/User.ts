@@ -54,7 +54,8 @@ UserSchema.method('validatePassword', function(password) {
 UserSchema.method('generateJWT', function() {
   return jwt.sign({
     username: this.username,
-    roles: this.roles.reduce((acc,role) => { return acc.concat(permission[role]) }, [])
+    roles: this.roles,
+    permissions: this.roles.reduce((acc, role) => { return acc.concat(permission[role]); }, [])
   }, process.env.JWT_SECRET, {expiresIn: '2 days'});
 });
 

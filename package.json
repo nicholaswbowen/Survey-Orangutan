@@ -117,6 +117,7 @@
     "jsonwebtoken": "^7.3.0",
     "jwt-simple": "^0.5.1",
     "lodash": "^4.17.4",
+    "masonry-layout": "^4.1.1",
     "mo-js": "^0.288.1",
     "mojs-curve-editor": "^1.5.0",
     "mojs-player": "^0.43.16",

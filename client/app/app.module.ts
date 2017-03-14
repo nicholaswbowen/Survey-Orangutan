@@ -3,6 +3,7 @@ import config from './app.config';
 import run from './app.run';
 import core from './core/core.module';
 import 'angular-ui-router';
+import * as masonry from 'masonry-layout';
 import {SessionServiceModule} from './services/session.service';
 
 import LayoutComponent from './layout/layout.module';

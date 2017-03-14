@@ -1,5 +1,4 @@
 import * as bodyParser from 'body-parser';
-import configPassport from './config/passport';
 import * as cookieParser from 'cookie-parser';
 import * as debug from 'debug';
 import * as ejs from 'ejs';
@@ -20,11 +19,14 @@ import {cookieList} from './lib/dev';
 
 import * as auth from './api/auth';
 import * as user from './api/user';
-import * as postApi from './api/post.api';
+import * as surveyApi from './api/survey';
+import {generateParticipants} from './models/Seed/Seed';
+import {Survey} from './models/Survey';
 // replacing deprecated promise
 (<any> mongoose).Promise = global.Promise;
 
 let app = express();
+require('./config/passport');
 const isDev = app.get('env') === 'development' ? true : false;
 
 // helmet (read the docs)
@@ -45,7 +47,6 @@ app.use('/client', express.static('client'));
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('mongoose connected');
-    configPassport();
       User.findOne({username: 'admin'}, (err, user) => {
         if (err) return;
         if (user) return;
@@ -57,6 +58,19 @@ mongoose.connect(process.env.MONGO_URI)
           admin.roles = ['user', 'admin'];
           admin.save();
       });
+        // seed script
+        // generateParticipants(500)
+        //   .then((result) => {
+        //     console.log(result);
+        //     Survey.create(result)
+        //       .then((result) => {
+        //         console.log(`seed generated`)
+        //       })
+        //       .catch((e) => {
+        //         console.log(`seed not generated, error; ${e.message}`)
+        //       });
+        //   });
+
 
   }).catch((e) => {
     console.log(e);
@@ -81,7 +95,7 @@ app.use('/', routes);
 // apis
 app.use('/api', user);
 app.use('/api', auth);
-app.use('/api', postApi);
+app.use('/api', surveyApi);
 // THIS IS THE INTERCEPTION OF ALL OTHER REQ
 // After server routes / static / api
 // redirect 404 to home for the sake of AngularJS client-side routes

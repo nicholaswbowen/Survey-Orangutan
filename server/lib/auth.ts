@@ -19,9 +19,9 @@ export const hasRole = function hasRole (role: string) {
   return function (req, res, next) {
     if (req.user) {
       let hasRole = req.user['roles'].some((v) => v === role);
-      return hasRole ? next() : res.status(403).json({message: 'Unauthorized'});
+      return hasRole ? next() : res.status(403).json({message: `Unauthorized`});
     } else {
-      res.status(403).json({message: 'Unauthorized'});
+      res.status(403).json({message: `Unauthorized + ${hasRole}`});
     }
   };
 };

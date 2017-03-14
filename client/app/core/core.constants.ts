@@ -10,9 +10,6 @@ export default angular.module('app.core.constants', [])
     notAuthenticated: 'auth-not-authenticated',
     notAuthorized: 'auth-not-authorized'
   })
-  .constant('DECK_BUILDER_CONFIG', {
-    title: 'Deck Builder'
-  })
   .constant('HOME_CONFIG', {
     title: 'Home Page'
   })

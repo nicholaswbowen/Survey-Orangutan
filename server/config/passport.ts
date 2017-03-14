@@ -7,7 +7,7 @@ let TwitterStrategy = require('passport-twitter').Strategy;
 let JwtStrategy = require('passport-jwt').Strategy;
 let ExtractJwt = require('passport-jwt').ExtractJwt;
 
-let initialize = function intialize () {
+
   passport.serializeUser(function(user: IUser, done) {
     done(null, user);
   });
@@ -75,6 +75,4 @@ let initialize = function intialize () {
         return done(null, user);
       });
   }));
-};
-
-export default initialize;
+  
