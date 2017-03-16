@@ -1,7 +1,6 @@
 npm-debug.log
 node_modules
-client/**/*.js
-server/**/*.js
+*.js
 bundle
 .env
 dist
@@ -11,3 +10,4 @@ dist
 coverage
 !webpack.config.js
 !karma.conf.js
+!workers/*.js

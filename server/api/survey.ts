@@ -4,11 +4,18 @@ import {guard} from '../lib/guard';
 import {Survey} from '../models/Survey';
 let router = express.Router();
 
+
 router.get('/survey/:surveyId',
-passport.authenticate('jwt'),
-guard(['survey:write']),
+// passport.authenticate('jwt'),
+// guard(['survey:write']),
 (req,res,next) => {
-  Survey.findById({_id: req.params.surveyId, owner: req.user.username})
+
+  // let stream = Survey.find({_id: req.params.surveyId}).stream();
+  //
+  // stream.on('data', (chunk) => {
+  //   res.write(chunk);
+  // })
+  Survey.findById({_id: req.params.surveyId})
     .then((result) => {
       res.json(result);
     })
@@ -16,6 +23,26 @@ guard(['survey:write']),
       res.json({message: 'get failed', error: e});
     })
 })
+
+// router.get('/survey/:surveyId', (req, res, next) => {
+//   res.set('Content-Type', 'application/json');
+//   res.write('[');
+//   var prevChunk = null;
+//   Survey.find({_id: req.params.surveyId}).cursor()
+//     .on('data', function onData(data) {
+//       if (prevChunk) {
+//         res.write(JSON.stringify(prevChunk) + ',');
+//       }
+//       prevChunk = data;
+//     })
+//     .on('end', function onEnd() {
+//       if (prevChunk) {
+//         res.write(JSON.stringify(prevChunk));
+//       }
+//       res.end(']');
+//     });
+// });
+
 
 router.post('/survey',
 passport.authenticate('jwt'),

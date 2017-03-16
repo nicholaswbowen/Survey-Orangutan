@@ -14,14 +14,13 @@
     "noLib": false,
     "preserveConstEnums": true,
     "suppressImplicitAnyIndexErrors": true,
-    "lib": ["dom", "es6"],
+    "lib": ["es6", "webworker"],
     "sourceMap": true
   },
   "exclude": [
     "node_modules",
     "typings/browser",
-    "typings/browser.d.ts",
-    "client/app/workers"
+    "typings/browser.d.ts"
   ],
   "compileOnSave": true,
   "buildOnSave": false,

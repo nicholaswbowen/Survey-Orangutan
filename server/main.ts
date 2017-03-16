@@ -40,7 +40,7 @@ app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'ejs');
 
 // static routing
-app.use('/node_modules', express.static(path.join(__dirname, 'node_modules')));
+app.use('/node_modules', express.static(path.join(__dirname, '../node_modules')));
 app.use('/client', express.static('client'));
 
 // Connect to db
@@ -59,9 +59,8 @@ mongoose.connect(process.env.MONGO_URI)
           admin.save();
       });
         // seed script
-        // generateParticipants(500)
+        // generateParticipants(50000)
         //   .then((result) => {
-        //     console.log(result);
         //     Survey.create(result)
         //       .then((result) => {
         //         console.log(`seed generated`)
